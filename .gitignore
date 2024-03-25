@@ -3,7 +3,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-!**/app password.txt
+/app password.txt
 
 ### Eclipse ###
 .apt_generated
