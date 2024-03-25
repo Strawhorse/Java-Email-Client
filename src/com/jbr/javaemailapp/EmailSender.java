@@ -15,8 +15,8 @@ public class EmailSender {
 
     public static void sendEmail(String recipient, String subject, String messageBody) throws MessagingException {
 
-        final String account = "s*****b******@gmail.com";
-        final String password = "**********";
+        final String username = "s**********@gmail.com";
+        final String password = "<password goes here>";
 
 
 //        email account properties for sending email
@@ -33,7 +33,7 @@ public class EmailSender {
                 {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return super.getPasswordAuthentication();
+                        return new PasswordAuthentication(username,password);
                     }
                 }
         );
@@ -42,7 +42,7 @@ public class EmailSender {
 
         MimeMessage message = new MimeMessage(session);
 
-        message.setFrom(new InternetAddress(account));
+        message.setFrom(new InternetAddress(username));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
         message.setSubject(subject);
         message.setText(messageBody);
@@ -50,6 +50,17 @@ public class EmailSender {
         Transport.send(message);
 
         System.out.println("Message sent successfully to: " + recipient);
+
+    }
+
+
+    public static void main(String[] args) throws MessagingException {
+
+        String to = "strawhorse@gmail.com";
+        String subject = "Test 1";
+        String body = "This is a first test";
+
+        sendEmail(to, subject, body);
 
     }
 
