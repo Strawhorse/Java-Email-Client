@@ -1,7 +1,6 @@
 package com.jbr.javaemailapp;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -13,7 +12,7 @@ public class EmailSender {
 //    Create a session with authentication for the access
 //    Compose and then send emails
 
-    public static void sendEmail(String recipient, String subject, String messageBody) throws MessagingException {
+    public static void sendEmails(String recipient, String subject, String messageBody) throws MessagingException {
 
         final String username = "s**********@gmail.com";
         final String password = "<password goes here>";
@@ -60,7 +59,7 @@ public class EmailSender {
         String subject = "Test 1";
         String body = "This is a first test";
 
-        sendEmail(to, subject, body);
+        sendEmails(to, subject, body);
 
     }
 
