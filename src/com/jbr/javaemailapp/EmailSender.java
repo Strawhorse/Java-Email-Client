@@ -1,5 +1,9 @@
 package com.jbr.javaemailapp;
 
+import javax.mail.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class EmailSender {
@@ -9,10 +13,10 @@ public class EmailSender {
 //    Create a session with authentication for the access
 //    Compose and then send emails
 
-    public static void sendEmail(String recipient, String subject, String messageBody) {
+    public static void sendEmail(String recipient, String subject, String messageBody) throws MessagingException {
 
-        final String account = "seanobrachain@gmail.com";
-        final String password = "than uklw rpbt ioha";
+        final String account = "s*****b******@gmail.com";
+        final String password = "**********";
 
 
 //        email account properties for sending email
@@ -24,7 +28,28 @@ public class EmailSender {
         properties.put("mail.smtp.starttls.enable", "true");
 
 
+//        create a new session
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator()
+                {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return super.getPasswordAuthentication();
+                    }
+                }
+        );
 
+//       MIME uses headers and separators that tell a user agent (UA) how to re-create the message
+
+        MimeMessage message = new MimeMessage(session);
+
+        message.setFrom(new InternetAddress(account));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+        message.setSubject(subject);
+        message.setText(messageBody);
+
+        Transport.send(message);
+
+        System.out.println("Message sent successfully to: " + recipient);
 
     }
 

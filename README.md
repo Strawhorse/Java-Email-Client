@@ -9,3 +9,5 @@ More info at: https://www.oreilly.com/library/view/learning-java/1565927184/ch19
 
 Details of Gmail login details here: https://kinsta.com/blog/gmail-smtp-server/
 
+Good info here: https://www.tabnine.com/code/java/classes/javax.mail.internet.MimeMessage
+
