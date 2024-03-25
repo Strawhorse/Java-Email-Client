@@ -45,10 +45,13 @@ public class EmailReceiver {
         inbox.open(Folder.READ_ONLY);
 
         Message[] messages = inbox.getMessages();
+
         System.out.println("Number of emails currently in Inbox: " + messages.length);
 
+        int count = 0;
         for(Message message: messages) {
-            System.out.println("Email subject: " + message.getSubject());
+            count+=1;
+            System.out.println("Email #: " + count + ", Email subject: " + message.getSubject());
         }
 
 
@@ -65,9 +68,9 @@ public class EmailReceiver {
 
     public static void main(String[] args) throws MessagingException {
 
+        final String username = "s**********@gmail.com";
+        final String password = "<password goes here>";
 
-        String username = "s*****b*******.com";
-        String password = "<password goes here>";
 
         receiveEmails(username,password);
     }
