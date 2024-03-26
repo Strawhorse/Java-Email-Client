@@ -14,8 +14,8 @@ public class EmailSender {
 
     public static void sendEmails(String recipient, String subject, String messageBody) throws MessagingException {
 
-        final String username = "s**********@gmail.com";
-        final String password = "<password goes here>";
+        final String username = "s****b******@gmail.com";
+        final String password = "";
 
 
 //        email account properties for sending email
@@ -28,9 +28,10 @@ public class EmailSender {
 
 
 //        create a new session
+//        Info found at: https://www.tabnine.com/code/java/methods/javax.mail.Session/getInstance
+
         Session session = Session.getInstance(properties, new javax.mail.Authenticator()
                 {
-                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username,password);
                     }

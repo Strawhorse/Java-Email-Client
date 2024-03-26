@@ -1,9 +1,6 @@
 package com.jbr.javaemailapp;
 
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
+import javax.mail.*;
 import java.util.Properties;
 
 
@@ -31,12 +28,13 @@ public class EmailReceiver {
 
 
 //        now create session
+//        Good info here: https://stackoverflow.com/questions/4184204/what-is-the-difference-between-getdefaultinstance-and-getinstance-in-session
 
         Session session = Session.getDefaultInstance(properties);
 
 //        A Store mirrors an inbox structure with similar retrieval
 
-        javax.mail.Store store = session.getStore("imaps");
+        Store store = session.getStore("imaps");
         store.connect("imap.gmail.com", username,password);
 
 
@@ -53,13 +51,6 @@ public class EmailReceiver {
             count+=1;
             System.out.println("Email #: " + count + ", Email subject: " + message.getSubject());
         }
-
-
-        /*
-        * This loops through everything in the inbox which takes ages
-        * Could be improved with a pause function
-        * */
-
 
 
         inbox.close();
