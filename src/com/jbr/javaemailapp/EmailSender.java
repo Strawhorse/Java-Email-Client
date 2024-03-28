@@ -3,6 +3,7 @@ package com.jbr.javaemailapp;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.util.Properties;
 
 public class EmailSender {
@@ -12,7 +13,7 @@ public class EmailSender {
 //    Create a session with authentication for the access
 //    Compose and then send emails
 
-    public static void sendEmailsWithAttachment(String recipient, String subject, String messageBody) throws MessagingException {
+    public static void sendEmailsWithAttachment(String recipient, String subject, String messageBody, File[] attachments) throws MessagingException {
 
         final String username = "s****b******@gmail.com";
         final String password = "";
@@ -32,7 +33,6 @@ public class EmailSender {
 
         Session session = Session.getInstance(properties, new Authenticator()
                 {
-                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username,password);
                     }
@@ -43,13 +43,17 @@ public class EmailSender {
 
         MimeMessage message = new MimeMessage(session);
 
+
+//        Would just message.setFrom(username); work?
         message.setFrom(new InternetAddress(username));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
         message.setSubject(subject);
+
+
+
         message.setText(messageBody);
 
         Transport.send(message);
-
         System.out.println("Message sent successfully to: " + recipient);
 
     }
