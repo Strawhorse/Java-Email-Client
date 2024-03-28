@@ -12,7 +12,7 @@ public class EmailSender {
 //    Create a session with authentication for the access
 //    Compose and then send emails
 
-    public static void sendEmails(String recipient, String subject, String messageBody) throws MessagingException {
+    public static void sendEmailsWithAttachment(String recipient, String subject, String messageBody) throws MessagingException {
 
         final String username = "s****b******@gmail.com";
         final String password = "";
@@ -30,8 +30,9 @@ public class EmailSender {
 //        create a new session
 //        Info found at: https://www.tabnine.com/code/java/methods/javax.mail.Session/getInstance
 
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator()
+        Session session = Session.getInstance(properties, new Authenticator()
                 {
+                    @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username,password);
                     }
@@ -60,7 +61,7 @@ public class EmailSender {
         String subject = "Test 1";
         String body = "This is a first test";
 
-        sendEmails(to, subject, body);
+        sendEmailsWithAttachment(to, subject, body);
 
     }
 
