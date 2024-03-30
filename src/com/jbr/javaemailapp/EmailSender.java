@@ -66,6 +66,10 @@ public class EmailSender {
         textBody.setText(body);
         mailMultipart.addBodyPart(textBody);
 
+
+
+//        Each file selected for attachment is added as a separate MimeBodyPart, and all parts are combined into a Multipart object.
+
         boolean hasAttachments = false;
         for(File file: attachments){
             MimeBodyPart attachmentPart = new MimeBodyPart();
