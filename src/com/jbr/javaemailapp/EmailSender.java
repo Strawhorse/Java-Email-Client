@@ -2,7 +2,11 @@ package com.jbr.javaemailapp;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 public class EmailSender {
@@ -12,7 +16,7 @@ public class EmailSender {
 //    Create a session with authentication for the access
 //    Compose and then send emails
 
-    public static void sendEmails(String recipient, String subject, String messageBody) throws MessagingException {
+    public static void sendEmailsWithAttachment(String recipient, String subject, String body, File[] attachments) throws MessagingException, IOException {
 
         final String username = "s****b******@gmail.com";
         final String password = "";
@@ -45,11 +49,34 @@ public class EmailSender {
         message.setFrom(new InternetAddress(username));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
         message.setSubject(subject);
-        message.setText(messageBody);
 
+
+//        javax.mail
+//        Multipart is a container that holds multiple body parts. Multipart provides methods to retrieve and set its subparts.
+        Multipart mailMultipart = new MimeMultipart();
+
+        MimeBodyPart textBody = new MimeBodyPart();
+        textBody.setText(body);
+        mailMultipart.addBodyPart(textBody);
+
+        boolean hasAttachments = false;
+        for(File file: attachments){
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            attachmentPart.attachFile(file);
+            mailMultipart.addBodyPart(attachmentPart);
+            hasAttachments = true;
+        }
+
+        message.setContent(mailMultipart);
         Transport.send(message);
 
-        System.out.println("Message sent successfully to: " + recipient);
+        if(hasAttachments) {
+            System.out.println("Message sent successfully with attachments to: " + recipient);
+        }
+        else {
+            System.out.println("Message sent successfully to: " + recipient);
+        }
+
 
     }
 
@@ -60,7 +87,7 @@ public class EmailSender {
         String subject = "Test 1";
         String body = "This is a first test";
 
-        sendEmails(to, subject, body);
+        sendEmailsWithAttachment(to, subject, body, attachments);
 
     }
 
