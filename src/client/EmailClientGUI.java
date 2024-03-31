@@ -1,7 +1,10 @@
 package client;
 
+import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 
 public class EmailClientGUI extends JFrame {
@@ -18,6 +21,24 @@ public class EmailClientGUI extends JFrame {
 //    a UI initialisation method where all UI components will be initialised and added to the JFrame.
         initUserInterface();
         setVisible(true);
+
+
+//        Add a listener to check when we are closing the program down
+//        Check if the instance is null, and if not shut the instance down
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if(SessionManager.getInstance() != null){
+                    try {
+                        SessionManager.getInstance().closeInbox();
+                    } catch (MessagingException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
     }
 
 
@@ -45,7 +66,7 @@ public class EmailClientGUI extends JFrame {
         add(composeEmailButton, BorderLayout.SOUTH);
 
 
-//        Login dialogue screen
+//        Login dialogue screen; Ensured the login dialog is invoked immediately after the UI initialises
         SwingUtilities.invokeLater(this::showLoginDialogBox);
 
     }
@@ -76,11 +97,12 @@ public class EmailClientGUI extends JFrame {
 
 //                method to refresh the inbox
                 refreshInbox();
+
+            } catch (MessagingException e) {
+                JOptionPane.showMessageDialog(this, "Failed to access email account: " + e.getMessage(), "Login error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
-
         }
 
         else {

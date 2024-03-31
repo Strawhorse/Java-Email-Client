@@ -71,11 +71,7 @@ public class EmailReceiver {
 
     public static void main(String[] args) throws MessagingException {
 
-        final String username = "s**********@gmail.com";
-        final String password = "<password goes here>";
-
-
-        receiveEmail(username,password);
+        receiveEmail();
     }
 
 }
