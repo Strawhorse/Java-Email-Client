@@ -1,5 +1,7 @@
 package com.jbr.javaemailapp;
 
+import client.SessionManager;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -22,9 +24,10 @@ public class EmailSender {
     public static void sendEmailsWithAttachment(String recipient, String subject, String body, File[] attachments) throws MessagingException, IOException {
 
 
-        final String username = "s****b******@gmail.com";
-        final String password = "";
+//        Retrieved credentials from EmailSessionManager rather than passing them directly or managing them within EmailSender
 
+        String username = SessionManager.getUsername();
+        String password = SessionManager.getPassword();
 
 //        email account properties for sending email
         Properties properties = new Properties();
@@ -49,8 +52,7 @@ public class EmailSender {
 
 //       MIME uses headers and separators that tell a user agent (UA) how to re-create the message
 
-        MimeMessage message = new MimeMessage(session);
-
+        Message message = new MimeMessage(session);
 
 //        Would just message.setFrom(username); work?
         message.setFrom(new InternetAddress(username));
@@ -87,10 +89,6 @@ public class EmailSender {
         else {
             System.out.println("Message sent successfully to: " + recipient);
         }
-
-
-        System.out.println("Message sent successfully to: " + recipient);
-
 
     }
 

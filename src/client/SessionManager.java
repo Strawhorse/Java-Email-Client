@@ -48,6 +48,7 @@ public class SessionManager {
 
 
 //    static getInstance method to provide a global access point to the singleton instance of EmailSessionManager
+//    SessionManager = Store a global session, allow the storage of alternative sessions as well.
 
     public static SessionManager getInstance(String username, String password) throws Exception {
         if (instance == null) {
