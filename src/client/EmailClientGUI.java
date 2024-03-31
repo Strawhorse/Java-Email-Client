@@ -1,14 +1,16 @@
 package client;
 
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 
 public class EmailClientGUI extends JFrame {
@@ -83,6 +85,15 @@ public class EmailClientGUI extends JFrame {
         // Prompt the user to log in when the application starts
         SwingUtilities.invokeLater(this::showLoginDialog);
 
+        JButton composeEmailButton = new JButton("Compose");
+        composeEmailButton.addActionListener(e -> showComposeDialog());
+
+    }
+
+
+    private void showComposeDialog(){
+        JDialog composeDialog = new JDialog(this, "Compose Email", true);
+        composeDialog.setLayout(new BorderLayout(5,5));
     }
 
 
@@ -100,16 +111,36 @@ public class EmailClientGUI extends JFrame {
 //    event listener for the email list selection changes.
 //    When a user selects an email from the list, the application fetches and displays the email's subject, sender information, and body content in a dedicated reading area
 
-    private void emailListSelectionChanged(ListSelectionEvent e){
+    private void emailListSelectionChanged(ListSelectionEvent e) throws MessagingException, IOException {
 
         if(!e.getValueIsAdjusting() && emailList.getSelectedIndex() !=-1){
             Message selectedMessage = messages[emailList.getSelectedIndex()];
-
-//            need to finish method here for clearing previous emails...
-
+            emailMessageContent.setText("");    // clear previous content
+            emailMessageContent.append("Subject: " + selectedMessage.getSubject() + "\n\n");
+            emailMessageContent.append("From: " + selectedMessage.getFrom() + "\n\n");
+            emailMessageContent.append(getTextFromMessage(selectedMessage));
         }
-
     }
+
+
+
+    private String getTextFromMessage(Message message) throws MessagingException, IOException {
+        if (message.isMimeType("text/plain")) {
+            return (String) message.getContent();
+        }
+        else if (message.isMimeType("multipart/*")) {
+            MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
+
+            for(int i = 0; i < mimeMultipart.getCount(); i++) {
+                BodyPart bodypart = mimeMultipart.getBodyPart(i);
+                if(bodypart.isMimeType("text/plain")) {
+                    return (String) bodypart.getContent();
+                }
+            }
+        }
+        return "No readable email message content found";
+    }
+
 
 
 //    Login dialogue section
