@@ -42,12 +42,14 @@ public class SessionManager {
         else {
             throw new Exception("Error in username...");
         }
- 
+
 
     }
 
 
-    public static SessionManager getInstance(String username, String password) throws MessagingException {
+//    static getInstance method to provide a global access point to the singleton instance of EmailSessionManager
+
+    public static SessionManager getInstance(String username, String password) throws Exception {
         if (instance == null) {
             instance = new SessionManager(username, password);
         } return instance;

@@ -9,7 +9,7 @@ public class EmailClientGUI extends JFrame {
 
     public EmailClientGUI(){
         setTitle("Java Email App");
-        setSize(600,400);
+        setSize(800,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 

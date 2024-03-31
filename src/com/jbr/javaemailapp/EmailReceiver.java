@@ -1,6 +1,8 @@
 package com.jbr.javaemailapp;
 
 import javax.mail.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 
@@ -15,10 +17,21 @@ public class EmailReceiver {
     3. Access and process emails received.
      */
 
+    private static String username = "";
+    private static String password = "";
+
+
+//    Added a setCredentials method to dynamically set these credentials so that they can be called with the user's input from the GUI after login.
+    public static void setLoginCredentials(String user, String pw){
+        username = user;
+        password = pw;
+    }
+
+
 
 //   Info from: https://www.tabnine.com/code/java/classes/javax.mail.Store
 
-    public static void receiveEmails(String username, String password) throws MessagingException {
+    public static Message[] receiveEmail() throws MessagingException {
 
         Properties properties = new Properties();
         properties.put("mail.store.protocol", "imaps");
@@ -26,35 +39,34 @@ public class EmailReceiver {
         properties.put("mail.imaps.port", "993");
         properties.put("mail.imaps.ssl.enable", "true");
 
+        List<Message> messageListFromInbox = new ArrayList<>();
 
-//        now create session
-//        Good info here: https://stackoverflow.com/questions/4184204/what-is-the-difference-between-getdefaultinstance-and-getinstance-in-session
-
-        Session session = Session.getDefaultInstance(properties);
+        Session emailSession = Session.getInstance(properties);
 
 //        A Store mirrors an inbox structure with similar retrieval
 
-        Store store = session.getStore("imaps");
+        Store store = emailSession.getStore("imaps");
+
+//        Adjusted the receiveEmail method to use the stored credentials instead of passing them as parameters.
         store.connect("imap.gmail.com", username,password);
 
 
-//        create a folder class
+//        create a folder class and open as Read Only
         Folder inbox = store.getFolder("INBOX");
         inbox.open(Folder.READ_ONLY);
 
         Message[] messages = inbox.getMessages();
 
-        System.out.println("Number of emails currently in Inbox: " + messages.length);
-
-        int count = 0;
         for(Message message: messages) {
-            count+=1;
-            System.out.println("Email #: " + count + ", Email subject: " + message.getSubject());
+
+            messageListFromInbox.add(message);
         }
 
 
         inbox.close();
         store.close();
+
+        return messageListFromInbox.toArray(new Message[0]);
     }
 
     public static void main(String[] args) throws MessagingException {
@@ -63,7 +75,7 @@ public class EmailReceiver {
         final String password = "<password goes here>";
 
 
-        receiveEmails(username,password);
+        receiveEmail(username,password);
     }
 
 }
