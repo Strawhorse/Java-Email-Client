@@ -24,7 +24,7 @@ public class SessionManager {
 
 //    constructor
 
-    private SessionManager(String username, String password) throws MessagingException {
+    private SessionManager(String username, String password) throws Exception {
         Properties properties = new Properties();
         properties.put("mail.store.protocol", "imaps");
         properties.put("mail.imaps.host", "imap.gmail.com");
@@ -35,8 +35,14 @@ public class SessionManager {
         this.store = emailSession.getStore("imaps");
         this.store.connect(username, password);
 
-        currentUsername = username;
-        currentPassword = password;
+        if(!username.contains("@")) {
+            currentUsername = username;
+            currentPassword = password;
+        }
+        else {
+            throw new Exception("Error in username...");
+        }
+ 
 
     }
 
