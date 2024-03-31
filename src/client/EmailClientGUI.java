@@ -1,7 +1,11 @@
 package client;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -9,8 +13,14 @@ import java.awt.event.WindowEvent;
 
 public class EmailClientGUI extends JFrame {
 
-    private JTextField usernameField = new JTextField(20);
-    private JTextField passwordField = new JTextField(20);
+    private JTextArea emailMessageContent = new JTextArea();
+    private Message[] messages;
+
+    private JTextField usernameField = new JTextField();
+    private JTextField passwordField = new JTextField();
+
+    private DefaultListModel<String> emailListModel;  // model for the email list
+    private JList<String> emailList;  // for displaying emails
 
 
     public EmailClientGUI(){
@@ -44,30 +54,60 @@ public class EmailClientGUI extends JFrame {
 
     public void initUserInterface(){
 
-//        INBOX PANEL
-//      JList with a DefaultListModel to list email subjects, making it scrollable by adding it to a JScrollPane.
-//        http://www.java2s.com/Code/Java/Swing-JFC/AnexampleofJListwithaDefaultListModel.htm#google_vignette
 
-        DefaultListModel<String> emailListModel = new DefaultListModel<>();
-        JList<String> emailList = new JList<>(emailListModel);
-        add(new JScrollPane(emailList), BorderLayout.WEST);
+//        Switched over to a JSplitPane so that users have the option to resize the email list and email reader panes within our client.
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setResizeWeight(0.5);
+        splitPane.setOneTouchExpandable(true);
+
+        JTextArea emailContent = new JTextArea();
+        emailContent.setEditable(false);
+
+        JButton composeButton = new JButton("Compose");
+
+        emailList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        emailList.addListSelectionListener(this::emailListSelectionChanged);
+        JScrollPane listScrollPane = new JScrollPane(emailList);
+
+        emailContent.setEditable(false);
+        JScrollPane contentScrollPane = new JScrollPane(emailContent);
+
+        splitPane.setLeftComponent(listScrollPane);
+        splitPane.setRightComponent(contentScrollPane);
+
+        getContentPane().add(splitPane, BorderLayout.CENTER);
+
+        bottomPanel.add(composeButton);
+        bottomPanel.add(refreshInboxButton);
+        add(bottomPanel, BorderLayout.SOUTH);
+        // Prompt the user to log in when the application starts
+        SwingUtilities.invokeLater(this::showLoginDialog);
+
+    }
 
 
-//        READING PANEL
-//        Added a JTextArea for displaying the content of the selected email, also within a JScrollPane to enable scrolling
-
-        JTextArea readingPanel = new JTextArea();
-        readingPanel.setEditable(false);
-        add(new JScrollPane(readingPanel), BorderLayout.CENTER);
-
-
-//        COMPOSE BUTTON
-        JButton composeEmailButton = new JButton("Compose new email");
-        add(composeEmailButton, BorderLayout.SOUTH);
+//    method for refreshing the inbox
+    private void refreshInbox() throws MessagingException {
+        Message[] messages = SessionManager.getInstance().receiveEmail();
+        emailListModel.clear();
+        for (Message message: messages){
+            emailListModel.addElement(message.getSubject() + " - From: " + InternetAddress.toString(message.getFrom()));
+        }
+    }
 
 
-//        Login dialogue screen; Ensured the login dialog is invoked immediately after the UI initialises
-        SwingUtilities.invokeLater(this::showLoginDialogBox);
+
+//    event listener for the email list selection changes.
+//    When a user selects an email from the list, the application fetches and displays the email's subject, sender information, and body content in a dedicated reading area
+
+    private void emailListSelectionChanged(ListSelectionEvent e){
+
+        if(!e.getValueIsAdjusting() && emailList.getSelectedIndex() !=-1){
+            Message selectedMessage = messages[emailList.getSelectedIndex()];
+
+//            need to finish method here for clearing previous emails...
+
+        }
 
     }
 
@@ -111,6 +151,8 @@ public class EmailClientGUI extends JFrame {
 
 
     }
+
+
 
 
     public static void main(String[] args) {
