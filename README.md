@@ -11,3 +11,18 @@ Details of Gmail login details here: https://kinsta.com/blog/gmail-smtp-server/
 
 Good info here: https://www.tabnine.com/code/java/classes/javax.mail.internet.MimeMessage
 
+
+
+Next:
+
+Finish off basic interface
+
+Test and run
+
+Add button to back up emails to database
+
+Create class to connect to database
+
+Create method to check if database exists
+
+Write code to back up e.g. 100 emails to database
