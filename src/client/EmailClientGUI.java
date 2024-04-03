@@ -176,9 +176,7 @@ public class EmailClientGUI extends JFrame {
             }
         }
 
-        else {
-            System.out.println("Sorry, login failed...");
-        }
+        else System.out.println("Sorry, login failed...");
 
 
     }

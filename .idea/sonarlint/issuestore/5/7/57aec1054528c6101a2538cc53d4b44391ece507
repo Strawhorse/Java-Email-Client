@@ -1,3 +1,11 @@
 
+Ž	java:S112¯"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8³–è ê1J$7e87ee85-7b44-48dd-98a1-75a274a4e341
+r
+java:S1948"*Make "messages" transient or serializable.(†€Ôéùÿÿÿÿ8Î—è ê1J$e1de44e4-8392-42dc-9e9e-ea644135b26c
 Š
-java:S3252"IUse static access with "javax.swing.WindowConstants" for "EXIT_ON_CLOSE".(Õû»öþÿÿÿÿJ$80e91df3-ccc1-418e-8485-69527d663054
+java:S3252"IUse static access with "javax.swing.WindowConstants" for "EXIT_ON_CLOSE".(Õû»öþÿÿÿÿJ$16106759-6738-4ab5-b8c6-5efd8a42ac62
+
+java:S1117f"<Rename "messages" which hides the field declared at line 19.(ƒ¯Ö8þ—è ê1J$7f75e0f5-edcf-4495-931d-923b7077dd08
+s	java:S106³"+Replace this use of System.out by a logger.(†”Öùøÿÿÿÿ8åËö ê1J$f91b6c20-9cd7-469a-8081-4e0a67556090
+€
+java:S1144“"7Remove this unused private "showLoginDialogBox" method.(Üþ•áÿÿÿÿÿ8Ÿ˜è ê1J$4099f9e1-6df8-476b-91bf-5952a7cf0eb3
