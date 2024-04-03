@@ -116,14 +116,26 @@ public class EmailClientGUI extends JFrame {
         if(!e.getValueIsAdjusting() && emailList.getSelectedIndex() !=-1){
             Message selectedMessage = messages[emailList.getSelectedIndex()];
             emailMessageContent.setText("");    // clear previous content
-            emailMessageContent.append("Subject: " + selectedMessage.getSubject() + "\n\n");
-            emailMessageContent.append("From: " + Arrays.toString(selectedMessage.getFrom()) + "\n\n");
-            emailMessageContent.append(getTextFromMessage(selectedMessage));
+            try {
+                emailMessageContent.append("Subject: " + selectedMessage.getSubject() + "\n\n");
+            } catch (MessagingException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                emailMessageContent.append("From: " + Arrays.toString(selectedMessage.getFrom()) + "\n\n");
+            } catch (MessagingException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                emailMessageContent.append(getTextFromMessage(selectedMessage));
+            } catch (MessagingException | IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
 
-
+//getTextFromMessage extracts and present the email body as plain text. This handles both simple text emails and more complex multipart messages.
     private String getTextFromMessage(Message message) throws MessagingException, IOException {
         if (message.isMimeType("text/plain")) {
             return (String) message.getContent();
@@ -176,7 +188,25 @@ public class EmailClientGUI extends JFrame {
             }
         }
 
-        else System.out.println("Sorry, login failed...");
+        else {
+            System.out.println("Sorry, login failed...");
+        }
+
+
+
+        private void showComposeDialog(){
+
+            JDialog composeDialog = new JDialog(this, "Compose Email", true);
+            composeDialog.setLayout(new BorderLayout(5,5));
+
+            Box fieldsPanel = Box.createVerticalBox();
+            JTextField recipientField = new JTextField();
+            JTextField subjectField = new JTextField();
+            JTextArea bodyText = new JTextArea(10, 20);
+            
+
+        }
+
 
 
     }

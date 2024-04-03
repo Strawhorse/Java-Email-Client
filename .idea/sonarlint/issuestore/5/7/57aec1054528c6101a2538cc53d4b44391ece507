@@ -1,7 +1,0 @@
-
-	java:S112¯"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8ñÙš¡ê1J$f6bfd51c-6cc1-4904-a178-682e16b30e7c
-r
-java:S1948"*Make "messages" transient or serializable.(†€Ôéùÿÿÿÿ8ˆÚš¡ê1J$be02e4d8-5168-4c35-9871-63076ebe5b10
-‘
-java:S3252 "IUse static access with "javax.swing.WindowConstants" for "EXIT_ON_CLOSE".(Õû»öşÿÿÿÿ8Úš¡ê1J$1c9b24ee-119a-4ad0-8088-7347019fb0d5
-s	java:S106³"+Replace this use of System.out by a logger.(†”Öùøÿÿÿÿ8ŸÚš¡ê1J$c1038aa7-c5c2-4648-9453-a1951f6fb80c
