@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class EmailClientGUI extends JFrame {
@@ -56,7 +57,6 @@ public class EmailClientGUI extends JFrame {
 
     public void initUserInterface(){
 
-
 //        Switched over to a JSplitPane so that users have the option to resize the email list and email reader panes within our client.
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setResizeWeight(0.5);
@@ -83,11 +83,11 @@ public class EmailClientGUI extends JFrame {
         bottomPanel.add(refreshInboxButton);
         add(bottomPanel, BorderLayout.SOUTH);
         // Prompt the user to log in when the application starts
-        SwingUtilities.invokeLater(this::showLoginDialog);
+        SwingUtilities.invokeLater(this::showLoginDialogBox);
 
+//        compose new email button
         JButton composeEmailButton = new JButton("Compose");
         composeEmailButton.addActionListener(e -> showComposeDialog());
-
     }
 
 
@@ -99,7 +99,7 @@ public class EmailClientGUI extends JFrame {
 
 //    method for refreshing the inbox
     private void refreshInbox() throws MessagingException {
-        Message[] messages = SessionManager.getInstance().receiveEmail();
+        messages = SessionManager.getInstance().receiveEmail();
         emailListModel.clear();
         for (Message message: messages){
             emailListModel.addElement(message.getSubject() + " - From: " + InternetAddress.toString(message.getFrom()));
@@ -111,13 +111,13 @@ public class EmailClientGUI extends JFrame {
 //    event listener for the email list selection changes.
 //    When a user selects an email from the list, the application fetches and displays the email's subject, sender information, and body content in a dedicated reading area
 
-    private void emailListSelectionChanged(ListSelectionEvent e) throws MessagingException, IOException {
+    private void emailListSelectionChanged(ListSelectionEvent e) {
 
         if(!e.getValueIsAdjusting() && emailList.getSelectedIndex() !=-1){
             Message selectedMessage = messages[emailList.getSelectedIndex()];
             emailMessageContent.setText("");    // clear previous content
             emailMessageContent.append("Subject: " + selectedMessage.getSubject() + "\n\n");
-            emailMessageContent.append("From: " + selectedMessage.getFrom() + "\n\n");
+            emailMessageContent.append("From: " + Arrays.toString(selectedMessage.getFrom()) + "\n\n");
             emailMessageContent.append(getTextFromMessage(selectedMessage));
         }
     }
