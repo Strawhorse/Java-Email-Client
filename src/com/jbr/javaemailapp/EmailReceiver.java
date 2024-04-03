@@ -3,13 +3,17 @@ package com.jbr.javaemailapp;
 import client.SessionManager;
 
 import javax.mail.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
 
 
 public class EmailReceiver {
 
-    public static void receiveEmail() throws MessagingException {
+    public static Message[] receiveEmail() throws MessagingException {
         SessionManager manager = SessionManager.getInstance();
-        manager.receiveEmail();
+        return manager.receiveEmail();
     }
 
 

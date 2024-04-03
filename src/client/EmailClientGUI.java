@@ -36,12 +36,12 @@ public class EmailClientGUI extends JFrame {
     public EmailClientGUI(){
         setTitle("Java Email App");
         setSize(800,600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
 //    a UI initialisation method where all UI components will be initialised and added to the JFrame.
         initUserInterface();
         setVisible(true);
-
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 //        Add a listener to check when we are closing the program down
 //        Check if the instance is null, and if not shut the instance down
