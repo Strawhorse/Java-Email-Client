@@ -1,5 +1,8 @@
 package client;
 
+import com.jbr.javaemailapp.AttachmentPicker;
+import com.jbr.javaemailapp.EmailSender;
+
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -10,20 +13,24 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class EmailClientGUI extends JFrame {
 
-    private JTextArea emailMessageContent = new JTextArea();
+    private final JTextArea emailMessageContent = new JTextArea();
     private Message[] messages;
 
-    private JTextField usernameField = new JTextField();
-    private JTextField passwordField = new JTextField();
+    private final JTextField usernameField = new JTextField();
+    private final JTextField passwordField = new JTextField();
 
-    private DefaultListModel<String> emailListModel;  // model for the email list
-    private JList<String> emailList;  // for displaying emails
+    DefaultListModel<String> emailListModel = new DefaultListModel<>();
+    JList<String> emailList = new JList<>(emailListModel);
 
 
     public EmailClientGUI(){
@@ -79,9 +86,6 @@ public class EmailClientGUI extends JFrame {
 
         getContentPane().add(splitPane, BorderLayout.CENTER);
 
-        bottomPanel.add(composeButton);
-        bottomPanel.add(refreshInboxButton);
-        add(bottomPanel, BorderLayout.SOUTH);
         // Prompt the user to log in when the application starts
         SwingUtilities.invokeLater(this::showLoginDialogBox);
 
@@ -90,11 +94,6 @@ public class EmailClientGUI extends JFrame {
         composeEmailButton.addActionListener(e -> showComposeDialog());
     }
 
-
-    private void showComposeDialog(){
-        JDialog composeDialog = new JDialog(this, "Compose Email", true);
-        composeDialog.setLayout(new BorderLayout(5,5));
-    }
 
 
 //    method for refreshing the inbox
@@ -190,7 +189,7 @@ public class EmailClientGUI extends JFrame {
 
         else {
             System.out.println("Sorry, login failed...");
-        }
+        }}
 
 
 
@@ -203,20 +202,68 @@ public class EmailClientGUI extends JFrame {
             JTextField recipientField = new JTextField();
             JTextField subjectField = new JTextField();
             JTextArea bodyText = new JTextArea(10, 20);
-            
 
+            bodyText.setLineWrap(true);
+            bodyText.setWrapStyleWord(true);
+
+            fieldsPanel.add(new JLabel("To"));
+            fieldsPanel.add(recipientField);
+            fieldsPanel.add(new JLabel("Subject"));
+            fieldsPanel.add(subjectField);
+
+            JPanel bottomPanel = new JPanel();
+            JButton attachFilesButton = new JButton("Attach Files");
+            JButton sendButton = new JButton("Send");
+            JLabel attachFilesLabel = new JLabel("No files attached..");
+
+
+//            event listener to check for attached files
+//        Good info here re: storing files in arraylists -> https://www.tutorialspoint.com/how-to-read-a-file-into-an-arraylist-in-java
+            List<File> attachedFiles = new ArrayList<File>();
+            attachFilesButton.addActionListener(e -> {
+                File[] files = AttachmentPicker.pickAttachments();
+                attachedFiles.addAll(Arrays.asList(files));
+                attachFilesLabel.setText(attachedFiles.size() + " files attached.");
+            });
+
+
+            sendButton.addActionListener(e->{
+                String recipient = recipientField.getText();
+                String subject = subjectField.getText();
+                String body = bodyText.getText();
+
+                File[] attachments = attachedFiles.toArray(new File[0]);
+                try {
+                    EmailSender.sendEmailsWithAttachment(recipient,subject,body,attachments);
+                    composeDialog.dispose();
+                } catch (MessagingException | IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+//            adhere buttons to the bottom panel
+            bottomPanel.add(attachFilesButton);
+            bottomPanel.add(sendButton);
+
+            composeDialog.add(fieldsPanel, BorderLayout.NORTH);
+            composeDialog.add(new JScrollPane(bodyText), BorderLayout.CENTER);
+            composeDialog.add(bottomPanel, BorderLayout.SOUTH);
+
+
+            composeDialog.pack();
+            composeDialog.setLocationRelativeTo(this);
+            composeDialog.setVisible(true);
         }
-
-
-
-    }
-
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(EmailClientGUI::new);
     }
 
+    }
 
-}
+
+
+
+
+
+

@@ -35,13 +35,8 @@ public class SessionManager {
         this.store = emailSession.getStore("imaps");
         this.store.connect(username, password);
 
-        if(!username.contains("@")) {
-            currentUsername = username;
-            currentPassword = password;
-        }
-        else {
-            throw new Exception("Error in username...");
-        }
+        currentUsername = username;
+        currentPassword = password;
 
 
     }
@@ -50,10 +45,10 @@ public class SessionManager {
 //    static getInstance method to provide a global access point to the singleton instance of EmailSessionManager
 //    SessionManager = Store a global session, allow the storage of alternative sessions as well.
 
-    public static SessionManager getInstance(String username, String password) throws Exception {
+    public static void getInstance(String username, String password) throws Exception {
         if (instance == null) {
             instance = new SessionManager(username, password);
-        } return instance;
+        }
     }
 
 //Overloaded the getInstance method with a parameterless version for accessing the instance after a login has occurred
