@@ -26,3 +26,7 @@ Create class to connect to database
 Create method to check if database exists
 
 Write code to back up e.g. 100 emails to database
+
+
+At running:
+UI opens, login screen comes up, but after entering login details nothing happens, need to debug
